@@ -16,7 +16,7 @@ def get_weather(city: str) -> str:
 model = init_chat_model( # Creates a connection to the AI
     "gemini-2.5-flash",           
     model_provider="google_genai",
-    temperature=0.7, # 0 exact, 1 creative
+    temperature=0.7, # (0 = exact, 1 = very creative)
 )
 
 agent = create_agent(
@@ -29,7 +29,7 @@ print("\n TEST 1: Asking about weather")
 print("User: What is the weather in sf?\n")
 
 response = agent.invoke( 
-    {"messages": [{"role": "user", "content": "What is the weather in sf?"}]}
+    {"messages": [{"role": "user", "content": "What is the weather in Tokyo?"}]}
 )
 
 print("Agent:", response["messages"][-1].content)
