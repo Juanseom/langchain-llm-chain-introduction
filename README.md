@@ -6,6 +6,19 @@ This project follows the official [LangChain Quickstart Tutorial](https://docs.l
 
 ---
 
+## Table of Contents
+- [What is this project?](#what-is-this-project)
+- [Project Architecture](#project-architecture)
+- [What is LangChain?](#what-is-langchain)
+- [What is an Agent?](#what-is-an-agent)
+- [Components Explained](#components-explained)
+- [Installation Instructions](#installation-instructions)
+- [How to Run the Code](#how-to-run-the-code)
+- [Example Output](#example-output)
+- [Differences Between Scripts](#differences-between-basicagentpy-and-fullagentpy)
+
+---
+
 ## What is this project?
 
 This project has **two Python scripts** that show how to build AI agents step by step:
@@ -17,11 +30,51 @@ This project has **two Python scripts** that show how to build AI agents step by
 
 ---
 
+## Project Architecture
+
+### File Structure
+
+```
+langchain-llm-chain-introduction/
+│
+├── basic_agent.py         # Simple agent with one tool
+├── full_agent.py          # Complete agent with memory and structured output
+├── requirements.txt       # Python dependencies
+├── .env                   # API key
+├── .env.example          # Template for .env file
+├── .gitignore            # Files to ignore in Git
+└── README.md             # This file
+```
+
+### Architecture Flow
+
+```
+User Question
+     ↓
+[ Agent ] ← System Prompt (instructions)
+     ↓
+[ Model ] ← AI (Gemini 2.5 Flash)
+     ↓
+Decision: Need a tool?
+     ↓                    ↓
+   YES                   NO
+     ↓                    ↓
+[ Tool Call ]         Direct Answer
+     ↓
+Get Result
+     ↓
+Format Response
+     ↓
+Return to User
+```
+
+---
+
 ## What is LangChain?
 
 **LangChain** is a Python framework that makes it easy to build applications with AI models (like ChatGPT, Gemini, Claude, etc.).
 
-Think of it like this:
+It is like this:
 - An AI model alone can only **answer questions**
 - With LangChain, the AI can also **use tools**, **remember conversations**, and **respond in a specific format**
 
@@ -108,7 +161,88 @@ agent = create_agent(
 
 ---
 
-## Output
+## Installation Instructions
+
+### Step 1: Prerequisites
+
+- Python 3.10 or higher
+
+### Step 2: Create a Virtual Environment
+
+A virtual environment keeps your project dependencies isolated.
+
+**On Windows:**
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+
+You should see `(venv)` at the beginning of your terminal prompt.
+
+### Step 3: Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+This installs:
+- `langchain` - Main framework
+- `langchain-google-genai` - Google Gemini integration
+- `langgraph` - For agent memory
+- `python-dotenv` - For loading environment variables
+
+### Step 4: Get Your Google API Key
+
+
+1. Go to [Google AI Studio](https://aistudio.google.com/apikey)
+2. Click **"Create API Key"**
+3. Copy the key (it looks like: `AIzaSyC...`)
+
+### Step 5: Configure the .env File
+
+1. Open `.env`
+
+2. Paste your API key:
+   ```
+   GOOGLE_API_KEY=your_key_here
+   ```
+
+3. Save the file
+
+---
+
+## How to Run the Code
+
+### Run the Basic Agent
+
+```bash
+python basic_agent.py
+```
+
+**What happens:**
+1. The agent gets a question about weather
+2. It calls the `get_weather` tool
+3. It returns a formatted answer
+4. Then it answers a general question without using tools
+
+### Run the Full Agent
+
+```bash
+python full_agent.py
+```
+
+**What happens:**
+1. The agent gets a question about "weather outside"
+2. It calls `get_user_location` to find where the user is
+3. It calls `get_weather_for_location` with that location
+4. It returns a structured response with a pun
+5. The user says "thank you"
+6. The agent remembers the previous conversation and responds
+
+---
+
+## Example Output
 
 ### basic_agent.py
 
